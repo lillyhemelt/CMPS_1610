@@ -1,0 +1,101 @@
+/*
+   Lilly Lastname
+   CMPS 161 — Program 3
+
+   Description:
+   This program reads an ASCII code (0–128) from the user and prints the
+   corresponding character. I also chose to implement a small tokenizer
+   class from scratch to demonstrate understanding of manual string
+   parsing and input handling in Java.
+*/
+
+import java.util.Scanner;
+
+public class Program_3 {
+
+    /*
+       MiniTokenizer:
+       A simple tokenizer that processes input one character at a time.
+       It identifies alphanumeric tokens and treats punctuation as
+       single-character tokens. This is intentionally lightweight and
+       written without using split() or regular expressions.
+    */
+    static class MiniTokenizer {
+        private final String input;
+        private int index = 0;
+
+        MiniTokenizer(String input) {
+            this.input = input;
+        }
+
+        String nextToken() {
+            // Skip whitespace
+            while (index < input.length() && Character.isWhitespace(input.charAt(index))) {
+                index++;
+            }
+
+            if (index >= input.length()) {
+                return null;
+            }
+
+            char c = input.charAt(index);
+
+            // Return punctuation as its own token
+            if (!Character.isLetterOrDigit(c)) {
+                index++;
+                return Character.toString(c);
+            }
+
+            // Build alphanumeric token
+            StringBuilder token = new StringBuilder();
+            while (index < input.length() && Character.isLetterOrDigit(input.charAt(index))) {
+                token.append(input.charAt(index));
+                index++;
+            }
+
+            return token.toString();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter an ASCII code: ");
+        String rawInput = sc.nextLine();
+
+        MiniTokenizer tokenizer = new MiniTokenizer(rawInput);
+        String token = tokenizer.nextToken();
+
+        try {
+            int ascii = Integer.parseInt(token);
+
+            // Validate ASCII range
+            if (ascii < 0 || ascii > 128) {
+                System.out.println("Please enter a number between 0 and 128.");
+                return;
+            }
+
+            char character = (char) ascii;
+
+            System.out.println("The character for ASCII code " + ascii + " is " + character);
+
+            // Character classification (optional but informative)
+            if (Character.isLetter(character)) {
+                if (Character.isUpperCase(character)) {
+                    System.out.println("This is an uppercase letter.");
+                } else {
+                    System.out.println("This is a lowercase letter.");
+                }
+            } else if (Character.isDigit(character)) {
+                System.out.println("This is a numeric digit.");
+            } else if (Character.isWhitespace(character)) {
+                System.out.println("This is a whitespace character.");
+            } else {
+                System.out.println("This is a symbol or non-alphanumeric character.");
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input: please enter a valid integer.");
+        }
+    }
+}
