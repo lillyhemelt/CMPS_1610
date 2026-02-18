@@ -1,6 +1,6 @@
 /*
-   Lilly Lastname
-   CMPS 161 — Program 3
+   Lilly Hemelt
+   CMPS 1610 — Program 3
 
    Description:
    This program reads an ASCII code (0–128) from the user and prints the
@@ -98,4 +98,5 @@ public class Program_3 {
             System.out.println("Invalid input: please enter a valid integer.");
         }
     }
+
 }
