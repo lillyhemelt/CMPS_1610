@@ -23,7 +23,7 @@ public class Program_4 {
 
     /* My own tiny random generator because apparently I enjoy suffering.
        This recreates the logic behind java.util.Random using an LCG.
-       Hand-crafted. Caffeinated. Malic-acid-infused. Chaos mode included. */
+       Hand-crafted. Caffeinated. Malic-acid-infused. Chaos mode included. I tried :) */
     static class MyRandom {
         private long seed;
         private final boolean chaos;
@@ -217,4 +217,5 @@ public class Program_4 {
         Girl in STEM with a vengeance.
         Fueled by caffeine, malic acid, and the audacity to keep going.*/
     }
+
 }
