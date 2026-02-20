@@ -1,34 +1,36 @@
 /* 
    ========================= LINER NOTES =========================
-    Lilly Hemelt
-    CMPS 1610 Program 5
-    Written under the influence of:
-    - too much caffeine
-    - too little sleep
-    - and OK Computer on repeat like a life-support machine
 
-    This program was handcrafted the way some people knit scarves
-    during emotional breakdowns. No shortcuts. No built-ins. 
-    Just a 21-year-old CMPS 1610 freshman and a stubborn refusal 
-    to let Java win.
+   Lilly Hemelt
+   CMPS 1610 — Program 5
 
-    GDoc if you're reading this:
-    thank you for believing in me, for noticing the growth,
-    and for letting me be proud of the weird little machine I built.
+   Written under the influence of:
+   - too much caffeine
+   - too little sleep
+   - and OK Computer on repeat like a life-support machine
 
-    This file contains:
-    - a state machine held together with hope
-    - manual comparisons because I said so
-    - existential commentary
-    - a heartbeat effect for dramatic flair
-    - optional TTS sighing (very on brand if you know Radiohead)
-    - a Let Down hum during sorting
-    - a Paranoid Android panic line for input failure
-    - a Lucky success message
-    - a Karma Police unreachable branch
-    - and a hidden track at the very bottom
+   This program was handcrafted the way some people knit scarves
+   during emotional breakdowns. No shortcuts. No built-ins.
+   Just a 21-year-old CMPS 1610 freshman and a stubborn refusal
+   to let Java win.
 
-    Play loud. 
+   GDoc, if you're reading this:
+   thank you for believing in me, for noticing the growth,
+   and for letting me be proud of the weird little machine I built.
+
+   This file contains:
+   - a state machine held together with hope
+   - manual comparisons because I said so
+   - existential commentary
+   - a heartbeat effect for dramatic flair
+   - optional TTS sighing (very on brand)
+   - a Let Down hum during sorting
+   - a Paranoid Android panic line for input failure
+   - a Lucky success message
+   - a Karma Police unreachable branch
+   - and a hidden track at the very bottom
+
+   Play loud.
    ================================================================
 */
 
@@ -154,7 +156,7 @@ public class Program_5 {
                 return readCity(input, prompt);
             } catch (Exception e) {
                 // PARANOID ANDROID PANIC LINE
-                System.out.println("An input error occurred. Please don’t yell at me.");
+                System.out.println("An input error occurred. Please don't yell at me.");
                 System.out.println("(paranoid android static intensifies)\n");
 
                 if (!input.hasNextLine()) {
@@ -358,7 +360,7 @@ public class Program_5 {
 
     public static String sign(int x) {
         switch (x) {
-            case 0:  return "0";
+            case 0: return "0";
             default:
                 if (x < 0) return "-";
                 return "+";
