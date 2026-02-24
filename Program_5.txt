@@ -1,3 +1,42 @@
+PROJECT DOCUMENTATION: PROGRAM 5
+
+Developer: Lilly Hemelt
+
+System Status: OPTIMIZED / FITTER / HAPPIER
+
+Line Count: 400+
+
+I. TECHNICAL SUMMARY
+
+This submission fulfills the requirements for Program 5 by implementing a Master State Machine to handle the program lifecycle. The core logic utilizes a handwritten Pattern Switch Matrix for three-way string sorting, avoiding all built-in Java sorting libraries.
+
+Key Architectural Features:
+
+State Machine: A while-switch structure managing Boot, Input, Calculation, and Output states.
+
+Manual Tokenizer: A custom MiniTokenizer class for character-by-character input parsing.
+
+Chaos Engine: A handmade Linear Congruential Generator (LCG) for timing and atmospheric variance.
+
+TTS Integration: External process calls to Windows PowerShell for "Fred" voice synthesis.
+
+
+Shutterstock
+II. LYRIC GLOSSARY & ARTISTIC INTENT
+
+The program features automated voice lines and console messages sourced from Radiohead’s 1997 album OK Computer. These are used to create a "techno-paranoia" aesthetic and do not reflect system errors or developer sentiment and are not directed at the user.
+
+"Fitter, Happier, More Productive": Standard boot sequence greeting.
+
+"Kicking, squealing, gucci little piggy": Triggered during a "Panic" state (input duplication).
+
+"A pig in a cage on antibiotics": Metaphor for the sorting process duration.
+
+"Everything in its right place": Confirmation of successful data organization.
+
+"Phew, for a minute there, I lost myself": Closing sequence / System logout.
+
+III. SOURCE CODE BACKUP
 /* =============================================================================
 LINER NOTES: THE "FRED" VOICE & MASTER STATE MACHINE
 
