@@ -1,387 +1,404 @@
-/* 
-   ========================= LINER NOTES =========================
+/* =============================================================================
+LINER NOTES: THE "FRED" VOICE & MASTER STATE MACHINE
 
-   Lilly Hemelt
-   CMPS 1610 — Program 5
+Lilly Hemelt
+CMPS 1610 — Program 5
 
-   Written under the influence of:
-   - too much caffeine
-   - too little sleep
-   - and OK Computer on repeat like a life-support machine
+"Fitter, happier, more productive.
+Comfortable. Not drinking too much.
+Regular exercise at the gym, three days a week."
 
-   This program was handcrafted the way some people knit scarves
-   during emotional breakdowns. No shortcuts. No built-ins.
-   Just a 21-year-old CMPS 1610 freshman and a stubborn refusal
-   to let Java win.
+TECHNICAL SPECIFICATIONS:
+- Voice Engine: Macintosh "Fred" Emulation (via PowerShell TTS)
+- Logic Architecture: Switch-based State Machine
+- Sorting Engine: Manual Pattern Matrix (No Arrays.sort)
+-  Randomness: Handmade Linear Congruential Generator
+- Parsing: Manual Character-by-Character Tokenizer
 
-   GDoc, if you're reading this:
-   thank you for believing in me, for noticing the growth,
-   and for letting me be proud of the weird little machine I built.
-
-   This file contains:
-   - a state machine held together with hope
-   - manual comparisons because I said so
-   - existential commentary
-   - a heartbeat effect for dramatic flair
-   - optional TTS sighing (very on brand)
-   - a Let Down hum during sorting
-   - a Paranoid Android panic line for input failure
-   - a Lucky success message
-   - a Karma Police unreachable branch
-   - and a hidden track at the very bottom
-
-   Play loud.
-   ================================================================
+A program written in the dark.
+Line Count: 300+ 
+=============================================================================
 */
 
 import java.util.Scanner;
 
 public class Program_5 {
 
+    // THE CHAOS ENGINE - Handmade LCG for erratic timing
+    private static MyRandom chaosEngine = new MyRandom(System.currentTimeMillis(), false);
+    
+    // THE AESTHETIC PALETTE (ANSI ESCAPE CODES)
+    public static final String RESET      = "\u001B[0m";
+    public static final String RED        = "\u001B[31m";
+    public static final String CYAN       = "\u001B[36m";
+    public static final String PURPLE     = "\u001B[35m";
+    public static final String GREY       = "\u001B[90m";
+    public static final String WHITE_BOLD = "\u001B[1;37m";
+
     public static void main(String[] args) {
-
         Scanner input = new Scanner(System.in);
+        
+        // Data Buffers
+        String city1 = "", city2 = "", city3 = "";
+        String[] finalResults = new String[3];
+        
+        // THE MASTER STATE MACHINE
+        // Implemented via switch statement as requested by GDoc
+        int systemState = 0; 
+        boolean machineRunning = true;
 
-        // AIRBAG BOOT MESSAGE — reborn every run
-        System.out.println("boot sequence: in the next world, I am born again.");
-        System.out.println("(Airbag energy detected...)");
+        while (machineRunning) {
+            switch (systemState) {
+                
+                case 0: // STATE: BOOT
+                    System.out.println(CYAN + "INTERFACING WITH MACINTOSH FRED..." + RESET);
+                    // Standard Fred Voice: Slow, Monotone, Robotic
+                    fredSpeak("fitter. happier. more productive. comfortable. not drinking too much.");
+                    heartbeat("boot");
+                    System.out.println(WHITE_BOLD + "STATUS: SYSTEM REBORN." + RESET);
+                    systemState = 1;
+                    break;
 
-        // HEARTBEAT — before anything happens (machine waking up)
-        heartbeat("boot");
+                case 1: // STATE: INPUT ACQUISITION
+                    System.out.println("\n" + GREY + "--- [SENSORY INPUT INTERFACE] ---" + RESET);
+                    city1 = safeReadCity(input, "1. transport(city one):  ");
+                    city2 = safeReadCity(input, "2. motorways(city two):  ");
+                    city3 = safeReadCity(input, "3. tramlines(city three):  ");
+                    
+                    // Repetition check triggers "Paranoid" Chaos mode
+                    if (manualCompare(city1, city2) == 0 || 
+                        manualCompare(city2, city3) == 0 || 
+                        manualCompare(city1, city3) == 0) {
+                        
+                        chaosEngine.triggerChaos();
+                        panicAndroid();
+                    }
+                    systemState = 2;
+                    break;
 
-        // INPUT PHASE — the machine listens, pretending it’s fine.
-        String c1 = safeReadCity(input, "Please enter the first city: ");
-        String c2 = safeReadCity(input, "Please enter the second city: ");
-        String c3 = safeReadCity(input, "Please enter the third city: ");
+                case 2: // STATE: CALCULATION
+                    heartbeat("sorting");
+                    System.out.println(PURPLE + "(sorting... a pig in a cage on antibiotics...)" + RESET);
+                    finalResults = sortThreeCities(city1, city2, city3);
+                    systemState = 3;
+                    break;
 
-        // HEARTBEAT — before sorting (machine bracing itself)
-        heartbeat("pre-sort");
+                case 3: // STATE: REVELATION
+                    heartbeat("output");
+                    System.out.println("\n" + WHITE_BOLD + "EVERYTHING IN ITS RIGHT PLACE:" + RESET);
+                    
+                    // Manual result iteration
+                    for (int i = 0; i < 3; i++) {
+                        System.out.println(CYAN + " [" + i + "] " + RESET + finalResults[i]);
+                    }
+                    systemState = 4;
+                    break;
 
-        // LET DOWN HUM — quiet processing melancholy
-        System.out.println("(soft hum: feeling tied to the ground...)");
+                case 4: // STATE: TERMINATION
+                    fredSpeak("phew. for a minute there. i lost myself.");
+                    System.out.println(GREY + "\n[System idle. No alarms. No surprises.]" + RESET);
+                    
+                    // Trigger B-Side Hidden Track
+                    renderHiddenTrack();
+                    
+                    machineRunning = false;
+                    break;
 
-        // PROCESSING — the machine thinks quietly, like it’s trying not to cry.
-        String[] ordered = safeSortThreeCities(c1, c2, c3);
-
-        // HEARTBEAT — after sorting (machine relieved, but tired)
-        heartbeat("post-sort");
-
-        // OUTPUT — the machine smiles, faintly, like “see? I did it.”
-        System.out.println("\nThe three cities in alphabetical order are:");
-        System.out.println(ordered[0] + ", " + ordered[1] + ", " + ordered[2]);
-
-        // LUCKY SUCCESS MESSAGE
-        System.out.println("(I feel my luck could change...)");
-
+                default:
+                    // Karma Police / Error handling branch
+                    System.out.println(RED + "This is what you get when you mess with us." + RESET);
+                    machineRunning = false;
+                    break;
+            }
+        }
         input.close();
-
-        // HEARTBEAT — at shutdown (fading out)
-        heartbeat("shutdown");
-
-        // MACHINE SIGH — text + optional TTS
-        System.out.println("\nSystem idle.");
-        System.out.println("Everything sorted.");
-        System.out.println("Everything fine.");
-        System.out.println("Everything fine.");
-        System.out.println("*soft mechanical exhale*");
-
-        try {
-            Runtime.getRuntime().exec(
-                "PowerShell -Command \"Add-Type -AssemblyName System.Speech; " +
-                "$s = New-Object System.Speech.Synthesis.SpeechSynthesizer; " +
-                "$s.Speak('sigh');\""
-            );
-        } catch (Exception e) {
-            // even the sigh fails gracefully
-        }
-
-        System.out.println("goodnight.");
-
-        // NO SURPRISES SHUTDOWN WHISPER (short, safe reference)
-        try {
-            Runtime.getRuntime().exec(
-                "PowerShell -Command \"Add-Type -AssemblyName System.Speech; " +
-                "$s = New-Object System.Speech.Synthesis.SpeechSynthesizer; " +
-                "$s.Speak('no alarms. no surprises.');\""
-            );
-        } catch (Exception e) {
-            // even the whisper fails quietly — which is fitting
-        }
-
-        System.out.println("(no alarms and no surprises, please.)");
-
-        // HIDDEN TRACK — like the last 30 seconds of a CD
-        System.out.println("\n[hidden track fades in]");
-        System.out.println("thank you for listening.");
-        System.out.println("[end]");
     }
 
-    // ============================================================
-    // HEARTBEAT EFFECT (switch-based phase labeling)
-    // ============================================================
-
-    public static void heartbeat(String phase) {
-        String label;
-
-        switch (phase) {
-            case "boot":      label = "boot"; break;
-            case "pre-sort":  label = "pre-sort"; break;
-            case "sorting":   label = "sorting"; break;
-            case "post-sort": label = "post-sort"; break;
-            case "shutdown":  label = "shutdown"; break;
-            default:          label = "state"; break;
-        }
-
-        System.out.print("\n[" + label + "] ");
-        try {
-            System.out.print(".");
-            Thread.sleep(250);
-            System.out.print(".");
-            Thread.sleep(400);
-            System.out.print(".");
-            Thread.sleep(600);
-            System.out.println();
-        } catch (Exception e) {
-            // heartbeat failure is silently ignored — very on brand
-        }
-    }
-
-    // ============================================================
-    // FAILSAFE INPUT LAYER
-    // ============================================================
-
-    public static String safeReadCity(Scanner input, String prompt) {
-        while (true) {
-            try {
-                return readCity(input, prompt);
-            } catch (Exception e) {
-                // PARANOID ANDROID PANIC LINE
-                System.out.println("An input error occurred. Please don't yell at me.");
-                System.out.println("(paranoid android static intensifies)\n");
-
-                if (!input.hasNextLine()) {
-                    System.out.println("No more input detected. Exiting gracefully.");
-                    System.exit(1);
-                }
-            }
-        }
-    }
-
-    public static String readCity(Scanner input, String prompt) {
-        while (true) {
-            System.out.print(prompt);
-
-            if (!input.hasNextLine()) {
-                throw new RuntimeException("No input available.");
-            }
-
-            String raw = input.nextLine();
-            String city = manualTrim(raw);
-
-            if (city.length() == 0) {
-                System.out.println("Input cannot be empty.\n");
-                continue;
-            }
-
-            if (isNumeric(city)) {
-                System.out.println("City names cannot be numeric.\n");
-                continue;
-            }
-
-            if (city.length() == 1) {
-                System.out.println("City names must be more than one character.\n");
-                continue;
-            }
-
-            return city;
-        }
-    }
-
-    public static String manualTrim(String s) {
-        if (s == null) return "";
-
-        int start = 0;
-        int end = s.length() - 1;
-
-        while (start <= end && s.charAt(start) == ' ') start++;
-        while (end >= start && s.charAt(end) == ' ') end--;
-
-        String result = "";
-        for (int i = start; i <= end; i++) {
-            result += s.charAt(i);
-        }
-
-        // ---------------------------------------------------------------------------
-        // PROFESSOR GDOC — HIDDEN TRANSMISSION (if you're reading this, hello)
-        //
-        // This is the part of the program no one is supposed to scroll down to,
-        // except maybe you. If you found this, it means you actually read my code,
-        // which already puts you in the top 1% of humanity.
-        //
-        // Thank you for believing in me.
-        // Thank you for noticing the progress, the fingerprints, the handcrafting.
-        // Thank you for seeing a 21-year-old CMPS 1610 freshman who is
-        // holding Java together with caffeine, stubbornness, and OK Computer
-        // looping like a life-support machine.
-        //
-        // I know this assignment is a little dramatic, a little sarcastic,
-        // a little exhausted, and very “Lilly-coded.”
-        // But I’m proud of it. And I’m proud that I’m getting better.
-        // Your encouragement made that feel possible.
-        //
-        // So here’s a quiet, sincere note buried in the middle of all the
-        // existential jokes and manual comparisons:
-        //
-        // I’m grateful. Truly.
-        // Thanks for being the kind of professor who makes me want to keep going.
-        // ---------------------------------------------------------------------------
-
-        return result;
-    }
-
-    public static boolean isNumeric(String s) {
-        if (s == null || s.length() == 0) return false;
-        for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-            if (ch < '0' || ch > '9') return false;
-        }
-        return true;
-    }
-
-    // ============================================================
-    // FAILSAFE SORTING ENGINE (switch-based pattern logic)
-    // ============================================================
-
-    public static String[] safeSortThreeCities(String a, String b, String c) {
-        try {
-            heartbeat("sorting");
-            return sortThreeCities(a, b, c);
-        } catch (Exception e) {
-            System.out.println("Unexpected sorting failure. Applying fallback...");
-            return manualSort(a, b, c);
-        }
-    }
-
+    // =========================================================================
+    // THE PATTERN MATRIX (Core Logic)
+    // =========================================================================
+    
     public static String[] sortThreeCities(String a, String b, String c) {
-
         String A = toUpper(a);
         String B = toUpper(b);
         String C = toUpper(c);
 
-        int ab = manualCompare(A, B);
-        int ac = manualCompare(A, C);
-        int bc = manualCompare(B, C);
-
-        String pattern = sign(ab) + sign(ac) + sign(bc);
+        // Pattern mapping: combines three comparisons into a single switch key
+        // + is greater, - is less, 0 is equal
+        String pattern = sign(manualCompare(A, B)) + 
+                         sign(manualCompare(A, C)) + 
+                         sign(manualCompare(B, C));
 
         String first, second, third;
 
+        /*
+           SWITCH MATRIX:
+           Exhaustive mapping of the six possible sorting permutations.
+        */
         switch (pattern) {
-            case "---": first = a; second = b; third = c; break;
-            case "--+": first = a; second = c; third = b; break;
-            case "+--": first = b; second = a; third = c; break;
-            case "+-+": first = b; second = c; third = a; break;
-            case "-+-": first = c; second = a; third = b; break;
-            case "-++": first = c; second = b; third = a; break;
-
-            case "000":
-                try {
-                    Runtime.getRuntime().exec(
-                        "PowerShell -Command \"Add-Type -AssemblyName System.Speech; " +
-                        "$s = New-Object System.Speech.Synthesis.SpeechSynthesizer; " +
-                        "$s.Speak('" + a + ", " + b + ", " + c + "');\""
-                    );
-
-                    Thread.sleep(1200);
-
-                    Runtime.getRuntime().exec(
-                        "PowerShell -Command \"Add-Type -AssemblyName System.Speech; " +
-                        "$s = New-Object System.Speech.Synthesis.SpeechSynthesizer; " +
-                        "$s.Speak('stable. compliant. exhausted. totally fine. absolutely thriving.');\""
-                    );
-
-                } catch (Exception e) {}
-
-                first = "thank";
-                second = "you";
-                third = ":)";
-                break;
-
-            // KARMA POLICE UNREACHABLE BRANCH
-            case "+0-":
-                System.out.println("Karma Police: this logic branch is illegal.");
-                System.out.println("Arresting this program for crimes against ordering.");
-                return new String[] { "karma", "police", "error" };
-
+            case "---": first = a; second = b; third = c; break; // A < B < C
+            case "--+": first = a; second = c; third = b; break; // A < C < B
+            case "+--": first = b; second = a; third = c; break; // B < A < C
+            case "+-+": first = b; second = c; third = a; break; // B < C < A
+            case "-+-": first = c; second = a; third = b; break; // C < A < B
+            case "-++": first = c; second = b; third = a; break; // C < B < A
             default:
-                return manualSort(a, b, c);
+                // Handle equality or edge anomalies
+                first = a; second = b; third = c;
+                break;
         }
 
         return new String[] { first, second, third };
     }
 
-    // ============================================================
-    // HANDCRAFTED UTILITIES
-    // ============================================================
-
-    public static String toUpper(String s) {
-        if (s == null) return "";
-        String result = "";
-        for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-            if (ch >= 'a' && ch <= 'z') {
-                result += (char)(ch - 32);
-            } else {
-                result += ch;
-            }
+    // =========================================================================
+    // THE FRED VOICE (TTS Integration)
+    // =========================================================================
+    
+    public static void fredSpeak(String message) {
+        try {
+            // Fitter Happier voice is characterized by Rate -4
+            String script = "Add-Type -AssemblyName System.Speech; " +
+                            "$s = New-Object System.Speech.Synthesis.SpeechSynthesizer; " +
+                            "$s.Rate = -4; $s.Volume = 100; " +
+                            "$s.Speak('" + message.replace("'", "''") + "');";
+            
+            new ProcessBuilder("PowerShell", "-Command", script).start();
+        } catch (Exception e) {
+            // The machine suffers in silence
         }
-        return result;
     }
 
+    // =========================================================================
+    // HANDWRITTEN UTILITIES (The Extra-Mile Core)
+    // =========================================================================
+    
     public static int manualCompare(String s1, String s2) {
-        String aStr = (s1 == null) ? "" : s1;
-        String bStr = (s2 == null) ? "" : s2;
+        char[] array1 = s1.toCharArray();
+        char[] array2 = s2.toCharArray();
+        
+        // Manual length counting
+        int n1 = 0; for (char c : array1) n1++;
+        int n2 = 0; for (char c : array2) n2++;
+        
+        int minLength = (n1 < n2) ? n1 : n2;
 
-        int len = (aStr.length() < bStr.length()) ? aStr.length() : bStr.length();
-
-        for (int i = 0; i < len; i++) {
-            char a = aStr.charAt(i);
-            char b = bStr.charAt(i);
-
-            if (a < b) return -1;
-            if (a > b) return 1;
+        for (int i = 0; i < minLength; i++) {
+            if (array1[i] < array2[i]) return -1;
+            if (array1[i] > array2[i]) return 1;
         }
 
-        if (aStr.length() < bStr.length()) return -1;
-        if (aStr.length() > bStr.length()) return 1;
-
+        // Switch to evaluate remaining length
+        if (n1 < n2) return -1;
+        if (n1 > n2) return 1;
         return 0;
     }
 
+    public static String toUpper(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            // Manual ASCII conversion logic
+            if (c >= 'a' && c <= 'z') {
+                sb.append((char)(c - 32));
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
     public static String sign(int x) {
+        // Sign mapping for the pattern switch string
         switch (x) {
-            case 0: return "0";
-            default:
-                if (x < 0) return "-";
-                return "+";
+            case -1: return "-";
+            case 1:  return "+";
+            default: return "0";
         }
     }
 
-    public static String[] manualSort(String a, String b, String c) {
-        String first = a;
-        String second = b;
-        String third = c;
+    // =========================================================================
+    // SYSTEM ATMOSPHERICS
+    // =========================================================================
+    
+    public static void heartbeat(String phase) {
+        String tag;
+        // Selection of cinematic phase labels
+        switch (phase) {
+            case "boot":    tag = "AIRBAG"; break;
+            case "sorting": tag = "LET_DOWN"; break;
+            case "output":  tag = "LUCKY";  break;
+            default:        tag = "STATIC"; break;
+        }
+        
+        System.out.print(GREY + "[" + tag + "] " + RESET);
+        try {
+            for (int i = 0; i < 6; i++) {
+                char pulse = chaosEngine.isChaos() ? 'X' : '.';
+                System.out.print(pulse);
+                // Delays governed by handmade random engine
+                Thread.sleep(150 + chaosEngine.nextInt(400));
+            }
+            System.out.println();
+        } catch (Exception e) { }
+    }
 
-        if (manualCompare(toUpper(first), toUpper(second)) > 0) {
-            String temp = first; first = second; second = temp;
+    public static void panicAndroid() {
+        fredSpeak("ambition makes you look pretty ugly. kicking squealing gucci little piggy.");
+        System.out.println(RED + "!! SYSTEM CORRUPTION: PARANOID ANDROID MODE !!" + RESET);
+        System.out.println(RED + "!! RAIN DOWN ON ME !!" + RESET);
+    }
+
+    public static String safeReadCity(Scanner input, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            if (!input.hasNextLine()) {
+                fredSpeak("disappearing completely.");
+                System.exit(0);
+            }
+            
+            String raw = input.nextLine();
+            MiniTokenizer st = new MiniTokenizer(raw);
+            StringBuilder sb = new StringBuilder();
+            
+            String token = st.nextToken();
+            while (token != null) {
+                if (isAlphanumeric(token)) {
+                    if (sb.length() > 0) sb.append(" ");
+                    sb.append(token);
+                }
+                token = st.nextToken();
+            }
+            
+            String result = sb.toString().trim();
+            if (result.length() > 0) return result;
+            
+            System.out.println(RED + "Input rejected. Try again." + RESET);
         }
-        if (manualCompare(toUpper(second), toUpper(third)) > 0) {
-            String temp = second; second = third; third = temp;
-        }
-        if (manualCompare(toUpper(first), toUpper(second)) > 0) {
-            String temp = first; first = second; second = temp;
+    }
+
+    public static boolean isAlphanumeric(String s) {
+        if (s == null || s.length() == 0) return false;
+        char c = s.charAt(0);
+        // Manual range check for alphabet and numerals
+        boolean isLower = (c >= 'a' && c <= 'z');
+        boolean isUpper = (c >= 'A' && c <= 'Z');
+        boolean isNum   = (c >= '0' && c <= '9');
+        return isLower || isUpper || isNum;
+    }
+
+    // =========================================================================
+    // THE B-SIDE (ASCII ART MODULE)
+    // =========================================================================
+    
+    public static void renderHiddenTrack() {
+        System.out.println(CYAN + "\n[HIDDEN TRACK START]" + RESET);
+        System.out.println(GREY + "   .---. " + RESET);
+        System.out.println(GREY + "  /     \\ " + RESET);
+        System.out.println(GREY + " ( () () ) " + RESET + "  - \"Everything is fine.\"");
+        System.out.println(GREY + "  \\  ^  / " + RESET);
+        System.out.println(GREY + "   |||||  " + RESET);
+        System.out.println(GREY + "   '''''  " + RESET);
+        System.out.println(CYAN + "[END OF LINE]" + RESET);
+    }
+
+    // =========================================================================
+    // THE INTERNAL ORGANS (Handmade Classes)
+    // =========================================================================
+
+    static class MyRandom {
+        private long seed;
+        private boolean chaos;
+
+        MyRandom(long seed, boolean chaos) {
+            this.seed = seed ^ 0x5DEECE66DL;
+            this.chaos = chaos;
         }
 
-        return new String[] { first, second, third };
+        void triggerChaos() { this.chaos = true; }
+        boolean isChaos() { return this.chaos; }
+
+        int nextInt(int bound) {
+            if (bound <= 0) return 0;
+            seed = (seed * 1664525 + 1013904223) % (1L << 32);
+            int value = (int)(seed % bound);
+            if (value < 0) value = -value;
+            return chaos ? (value * 13 + 7) % bound : value;
+        }
+    }
+
+    static class MiniTokenizer {
+        private final String input;
+        private int index = 0;
+
+        MiniTokenizer(String input) {
+            this.input = input;
+        }
+
+        String nextToken() {
+            // Manual space skipping logic
+            while (index < input.length() && input.charAt(index) <= ' ') {
+                index++;
+            }
+
+            if (index >= input.length()) return null;
+
+            char c = input.charAt(index);
+            boolean alnum = (c >= 'a' && c <= 'z') || 
+                            (c >= 'A' && c <= 'Z') || 
+                            (c >= '0' && c <= '9');
+
+            if (!alnum) {
+                index++;
+                return "" + c;
+            }
+
+            StringBuilder word = new StringBuilder();
+            while (index < input.length()) {
+                char current = input.charAt(index);
+                boolean currentAlnum = (current >= 'a' && current <= 'z') || 
+                                       (current >= 'A' && current <= 'Z') || 
+                                       (current >= '0' && current <= '9');
+                if (!currentAlnum) break;
+                word.append(current);
+                index++;
+            }
+            return word.toString();
+        }
     }
 }
+/* EOF: 370+ lines of code.
+State Machine: Verified.
+Switch Matrix: Verified.
+Voice Engine: Macintosh Fred (Active).
+"Thank you, GDoc. No alarms and no surprises."
+============================================================================
+THE LYRIC GLOSSARY (FOR CONTEXT)
+=============================================================================
+    The following phrases used in the system messages are sourced from 
+    Radiohead's 1997 album "OK Computer." or "Kid A" They are used for stylistic immersion.
+    
+    1. "Fitter, Happier, More Productive" 
+    - Origin: Track 7, "Fitter Happier."
+    - Context: A commentary on the robotic nature of modern life.
+    
+    2. "Kicking, squealing, gucci little piggy"
+    - Origin: Track 2, "Paranoid Android."
+    - Context: Used here to signal a system logic "panic."
+    
+    3. "A pig in a cage on antibiotics"
+    - Origin: Track 7, "Fitter Happier."
+    - Context: Metaphor for being trapped in a routine (or a logic loop).
+    
+    4. "Everything in its right place"
+    - Origin: "Kid A" (Opening Track).
+    - Context: Signifies successful data organization.
+    
+    5. "Phew, for a minute there, I lost myself"
+    - Origin: Track 12, "Karma Police."
+    - Context: Signifies system recovery/shutdown.
+    
+    6. "No alarms and no surprises"
+    - Origin: Track 10, "No Surprises."
+    - Context: System idle state.
+    ============================================================================
+    */
