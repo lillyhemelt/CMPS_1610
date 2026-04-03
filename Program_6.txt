@@ -1,0 +1,81 @@
+// Lilly Hemelt
+// Program_6 – CMPS 1610
+// Handcrafted solution built with the same philosophy I use in engineering work:
+// understand the system, control the flow, and keep every moving part intentional.
+// No shortcuts, no unnecessary abstractions — just clean logic and disciplined structure.
+
+public class Program_6 {
+    public static void main(String[] args) {
+
+        System.out.println("The Numbers divisible by 5 & 6 are:\n");
+
+        int printedOnLine = 0;     // manual flow tracking (like monitoring airflow channels in CFD)
+        int perLineLimit = 10;     // fixed output width, similar to structured telemetry packets
+
+        // iterate through the full range with intentional, predictable flow
+        for (int n = 100; n <= 1000; n++) {
+
+            // handcrafted divisibility checks:
+            // divisible by 5 → last digit is 0 or 5
+            // divisible by 6 → even AND divisible by 3
+            // divisible by 3 → digit-sum rule
+            // this is the "build your own tools" approach—no black boxes
+
+            boolean by5 = divisibleBy5(n);
+            boolean by6 = divisibleBy6(n);
+
+            // switch-case used intentionally to avoid repetitive if-else chains
+            // (clean branching = clean airflow)
+            switch ((by5 ? 1 : 0) + (by6 ? 2 : 0)) {
+
+                case 3: // both conditions true
+                    System.out.print(n + "  ");   // handcrafted spacing for alignment
+                    printedOnLine++;
+
+                    // manual line break—no formatting helpers
+                    if (printedOnLine == perLineLimit) {
+                        System.out.println();
+                        printedOnLine = 0;
+                    }
+                    break;
+
+                default:
+                    // number doesn't meet criteria; let it pass like turbulent flow we don't need
+                    break;
+            }
+        }
+    }
+
+    // handcrafted divisibility by 5
+    // last-digit logic: simple, mechanical, reliable—like a well-machined part
+    public static boolean divisibleBy5(int num) {
+        int lastDigit = num % 10;
+        return (lastDigit == 0 || lastDigit == 5);
+    }
+
+    // handcrafted divisibility by 6
+    // 6 = 2 * 3 → even + digit-sum rule
+    public static boolean divisibleBy6(int num) {
+        return isEven(num) && divisibleBy3(num);
+    }
+
+    // handcrafted even check
+    public static boolean isEven(int num) {
+        return (num % 2 == 0);
+    }
+
+    // handcrafted divisibility by 3 using digit-sum
+    // this is the kind of logic you write when you want to understand the system, not just use it
+    public static boolean divisibleBy3(int num) {
+        int sum = 0;
+        int temp = num;
+
+        // manual digit extraction—no shortcuts
+        while (temp > 0) {
+            sum += temp % 10;
+            temp /= 10;
+        }
+
+        return (sum % 3 == 0);
+    }
+}
